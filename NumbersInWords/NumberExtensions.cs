@@ -22,11 +22,7 @@ public static class NumberExtensions
         { 16,"sexton" },
         { 17,"sjutton" },
         { 18,"arton" },
-        { 19,"nitton" }
-    };
-
-    private static Dictionary<long, string> tens = new Dictionary<long, string>
-    {
+        { 19,"nitton" },
         { 20,"tjugo" },
         { 30,"trettio" },
         { 40,"förtio" },
@@ -37,38 +33,17 @@ public static class NumberExtensions
         { 90,"nittio" },
     };
 
-    public static string ToWords(this long number, bool useEn = false)
+    public static string ToWords(this long number, bool useEn = false) => number switch
     {
-        if (number == 1 && useEn)
-        {
-            return "en";
-        }
-        if (simpleNumberLookup.ContainsKey(number))
-        {
-            return simpleNumberLookup[number];
-        }
-        if (number < 100)
-        {
-            return ToWordsLessThan100(number);
-        }
-        if (number < 1000)
-        {
-            return HandleLargeNumber(number, 100, (_) => "hundra");
-        }
-        if (number < 1000000)
-        {
-            return HandleLargeNumber(number, 1000, (_) => "tusen");
-        }
-        if (number < 1000000000)
-        {
-            return HandleLargeNumber(number, 1000000, (part) => part == 1 ? "million" : "millioner", true);
-        }
-        if (number < 1000000000000000000)
-        {
-            return HandleLargeNumber(number, 1000000000, (part) => part == 1 ? "miljard" : "miljarder", true);
-        }
-        throw new ArgumentException("Number too large");
-    }
+        _ when number == 1 && useEn => "en",
+        _ when simpleNumberLookup.ContainsKey(number) => simpleNumberLookup[number],
+        _ when number < 100 => ToWordsLessThan100(number),
+        _ when number < 1000 => HandleLargeNumber(number, 100, (_) => "hundra"),
+        _ when number < 1_000_000 => HandleLargeNumber(number, 1_000, (_) => "tusen"),
+        _ when number < 1_000_000_000 => HandleLargeNumber(number, 1_000_000, (part) => part == 1 ? "million" : "millioner", true),
+        _ when number < 1_000_000_000_000_000_000 => HandleLargeNumber(number, 1_000_000_000, (part) => part == 1 ? "miljard" : "miljarder", true),
+        _ => throw new ArgumentException("Number too large")
+    };
 
     private static string HandleLargeNumber(long number, long divisor, Func<long, string> unit, bool useEn = false)
     {
@@ -87,6 +62,6 @@ public static class NumberExtensions
         var tensPart = number / 10 * 10;
         var onesPart = number % 10;
         var onesValue = onesPart > 0 ? onesPart.ToWords(true) : "";
-        return tens[tensPart] + onesValue;
+        return tensPart.ToWords() + onesValue;
     }
 }
