@@ -2,58 +2,55 @@ namespace NumbersInWords.Tests;
 
 public class ToWordsTests
 {
-    [Fact]
-    public void ShouldTranslateOne()
+    [Theory]
+    [InlineData(1, "ett")]
+    [InlineData(2, "två")]
+    [InlineData(3, "tre")]
+    [InlineData(4, "fyra")]
+    [InlineData(5, "fem")]
+    [InlineData(6, "sex")]
+    [InlineData(7, "sju")]
+    [InlineData(8, "åtta")]
+    [InlineData(9, "nio")]
+    [InlineData(10, "tio")]
+    [InlineData(11, "elva")]
+    [InlineData(12, "tolv")]
+    [InlineData(13, "tretton")]
+    [InlineData(14, "fjorton")]
+    [InlineData(15, "femton")]
+    [InlineData(16, "sexton")]
+    [InlineData(17, "sjutton")]
+    [InlineData(18, "arton")]
+    [InlineData(19, "nitton")]
+    public void ShouldTranslateAllNumbersTo19(long value, string expected)
     {
-        Assert.Equal("ett", 1L.ToWords());
+        Assert.Equal(expected, value.ToWords());
     }
 
-    [Fact]
-    public void ShouldTranslateAllNumbersTo19()
+    [Theory]
+    [InlineData(21, "tjugoen")]
+    [InlineData(32, "trettiotvå")]
+    [InlineData(43, "förtiotre")]
+    [InlineData(54, "femtiofyra")]
+    [InlineData(65, "sextiofem")]
+    [InlineData(76, "sjuttiosex")]
+    [InlineData(87, "åttiosju")]
+    [InlineData(98, "nittioåtta")]
+    public void ShouldTranslateAllNumbersLessThan100(long value, string expected)
     {
-        var expected = new[]{
-            "ett", "två", "tre", "fyra", "fem", "sex", "sju", "åtta", "nio", "tio", "elva", "tolv", "tretton", "fjorton", "femton", "sexton", "sjutton", "arton", "nitton"
-        };
-        for (long i = 0; i < expected.Length; i++)
-        {
-            Assert.Equal(expected[i], (i + 1).ToWords());
-        }
+        Assert.Equal(expected, value.ToWords());
     }
 
-    [Fact]
-    public void ShouldTranslateAllNumbersLessThan100()
+    [Theory]
+    [InlineData(100, "etthundra")]
+    [InlineData(201, "tvåhundraen")]
+    [InlineData(313, "trehundratretton")]
+    [InlineData(424, "fyrahundratjugofyra")]
+    [InlineData(535, "femhundratrettiofem")]
+    [InlineData(998, "niohundranittioåtta")]
+    public void ShouldTranslateAllNumbersLessThan1000(long value, string expected)
     {
-        var expected = new Dictionary<long, string>{
-            { 21, "tjugoen" },
-            { 32, "trettiotvå" },
-            { 43, "förtiotre" },
-            { 54, "femtiofyra" },
-            { 65, "sextiofem" },
-            { 76, "sjuttiosex" },
-            { 87, "åttiosju" },
-            { 98, "nittioåtta" },
-        };
-        foreach (var item in expected)
-        {
-            Assert.Equal(item.Value, item.Key.ToWords());
-        }
-    }
-
-    [Fact]
-    public void ShouldTranslateAllNumbersLessThan1000()
-    {
-        var expected = new Dictionary<long, string>{
-            { 100, "etthundra" },
-            { 201, "tvåhundraen" },
-            { 313, "trehundratretton" },
-            { 424, "fyrahundratjugofyra" },
-            { 535, "femhundratrettiofem" },
-            { 998, "niohundranittioåtta" },
-        };
-        foreach (var item in expected)
-        {
-            Assert.Equal(item.Value, item.Key.ToWords());
-        }
+        Assert.Equal(expected, value.ToWords());
     }
 
     [Theory]
